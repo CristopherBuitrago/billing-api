@@ -1,66 +1,82 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Customer API (Laravel 11)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Descripción
 
-## About Laravel
+Esta es una API para gestionar clientes, desarrollada con Laravel 11.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Esta API incluye un sistema de autenticación mediante JWT (JSON Web Token) para proteger ciertos endpoints y restringir el acceso a usuarios autenticados. Todavía queda pendiente agregar un mensaje personalizado cuando un usuario no autenticado intenta acceder a una ruta protegida.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Endpoints
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### **Clientes (Customers)**
 
-## Learning Laravel
+1. **Obtener todos los clientes:**
+   - **URL:** `GET /api/customers`
+   - **Descripción:** Retorna una lista con todos los clientes.
+   - **Autenticación requerida:** Sí (JWT).
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+2. **Obtener cliente por nombre:**
+   - **URL:** `GET /api/customers/by-name/{name}`
+   - **Descripción:** Busca un cliente por su nombre.
+   - **Autenticación requerida:** Sí (JWT).
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+3. **Obtener cliente por ID:**
+   - **URL:** `GET /api/customers/{id}`
+   - **Descripción:** Retorna los detalles de un cliente específico según su ID.
+   - **Autenticación requerida:** Sí (JWT).
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+4. **Crear un nuevo cliente:**
+   - **URL:** `POST /api/customers/create`
+   - **Descripción:** Crea un nuevo cliente en la base de datos.
+   - **Autenticación requerida:** Sí (JWT).
+   - **Parámetros:**
+     - `name`: Nombre del cliente.
+     - `email`: Correo electrónico del cliente.
+     - Otros parámetros adicionales según el esquema del modelo de cliente.
 
-## Laravel Sponsors
+5. **Actualizar un cliente:**
+   - **URL:** `PUT /api/customers/update/{id}`
+   - **Descripción:** Actualiza la información de un cliente existente.
+   - **Autenticación requerida:** Sí (JWT).
+   - **Parámetros:** Cualquier campo que necesite ser actualizado, como `name`, `email`, etc.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+6. **Eliminar un cliente:**
+   - **URL:** `DELETE /api/customers/delete/{id}`
+   - **Descripción:** Elimina un cliente específico de la base de datos.
+   - **Autenticación requerida:** Sí (JWT).
 
-### Premium Partners
+### **Autenticación**
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+7. **Registro de usuarios:**
+   - **URL:** `POST /api/register`
+   - **Descripción:** Permite registrar un nuevo usuario.
+   - **Autenticación requerida:** No.
 
-## Contributing
+8. **Inicio de sesión:**
+   - **URL:** `POST /api/login`
+   - **Descripción:** Inicia sesión con las credenciales de usuario y retorna un token JWT.
+   - **Autenticación requerida:** No.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+9. **Perfil del usuario autenticado:**
+   - **URL:** `GET /api/profile`
+   - **Descripción:** Muestra la información del perfil del usuario autenticado.
+   - **Autenticación requerida:** Sí (JWT).
 
-## Code of Conduct
+## JWT Token
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Se ha integrado JWT para la autenticación en la API. Una vez que el usuario inicia sesión, recibe un token que debe ser enviado en el header de las peticiones HTTP a rutas protegidas.
 
-## Security Vulnerabilities
+### Ejemplo de uso del token JWT:
+Al hacer una petición a cualquier endpoint protegido, se debe incluir el token JWT en el encabezado `Authorization` de la siguiente manera:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```
+Authorization: Bearer {token}
+```
 
-## License
+## Tareas pendientes
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- **Mensajes de error personalizados:** Falta agregar un mensaje personalizado cuando un usuario no autenticado intenta acceder a una ruta protegida. Actualmente, cuando se intenta acceder a una ruta sin un token válido, se retorna un error genérico de "Unauthorized". Se planea mejorar esto con una respuesta más clara y amigable para el usuario.
+
+---
+
+Este proyecto utiliza Laravel 11, por lo que debes tener PHP 8.2 o superior para su correcto funcionamiento. Para ejecutar este proyecto localmente, sigue los pasos de instalación de Laravel y configura las variables de entorno adecuadamente.
